@@ -1,7 +1,7 @@
 import React from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
 function HomePage() {
-  return <>This is the homepage</>;
+  return <Redirect to="/abilities" />;
 }
 export default HomePage;
