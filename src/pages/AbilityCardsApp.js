@@ -1,66 +1,75 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Draggable, { DraggableCore } from "react-draggable";
+import { Button } from "@blueprintjs/core";
 
 const Wrapper = styled.div`
   height: 100vh;
-  background: #30404d;
-  color: #defff2;
+`;
+
+const DeckHolder = styled.div`
+  display: flex;
 `;
 
 const Card = styled.div`
-  display: inline-block;
-  height: 200px;
-  width: 100px;
-  background: white;
+  position: relative;
+  height: 500px;
+  width: 333px;
+  background-color: white;
+  background-image: ${(props) => `url(/images/${props.image}.png)`};
+  background-repeat: no-repeat;
+  background-size: contain;
   margin: 2px;
-`;
-const CardPlaceHolder = styled.div`
-  display: inline-block;
-  position: absolute;
-  left: ${(props) => `${props.x}px`};
-  top: ${(props) => `${props.y}px`};
-  height: 200px;
-  width: 100px;
-  background: blue;
-  margin: 2px;
-`;
+  box-shadow: ${(props) => (props.used ? `inset 0 0 0 1000px rgba(6, 0, 0, 0.57)` : "none")};
 
-function handleDrag(x, y, z) {
-  // console.log("handleDrag", x, y, z);
-}
+  .bp3-button.bp3-minimal {
+    position: absolute;
+    color: white;
+    right: 10px;
+    box-shadow: inset 0 0 0 1000px rgba(6, 0, 0, 0.57);
+  }
+  .bp3-button.bp3-minimal:hover {
+    box-shadow: inset 0 0 0 1000px rgba(6, 0, 0, 0.57);
+  }
+`;
 
 const AbilityCardsApp = () => {
-  let arr = [1, 1];
-  let [placeholders, setPlaceholders] = useState([]);
+  let [deck, setDeck] = useState([
+    { url: "card", used: false },
+    { url: "card2", used: false },
+  ]);
 
-  function handleStart(x, y, z) {
-    console.log("x", x, "y", y.node.getBoundingClientRect());
-    setPlaceholders(
-      placeholders.concat({
-        x: y.node.getBoundingClientRect().x,
-        y: y.node.getBoundingClientRect().y,
+  function cardClicked(clickedCard) {
+    setDeck(
+      deck.map((card) => {
+        if (card.url === clickedCard.url) return { ...card, used: !clickedCard.used };
+        else return card;
+      })
+    );
+  }
+  function deleteCard(ev, deletedCard) {
+    ev.stopPropagation();
+    setDeck(
+      deck.filter((card) => {
+        return card.url !== deletedCard.url;
       })
     );
   }
 
-  console.log("placeholders", placeholders);
-
   return (
     <Wrapper>
-      {placeholders.map((placeholder) => {
-        console.log("placeholder", placeholder);
-        return <CardPlaceHolder x={placeholder.x} y={placeholder.y} />;
-      })}
-      {arr.map((el) => (
-        <Draggable
-          onStart={handleStart}
-          onDrag={handleDrag}
-          // onStop={handleStop}
-        >
-          <Card />
-        </Draggable>
-      ))}
+      <DeckHolder>
+        {deck.map((card, i) => (
+          <Card key={i} onClick={() => cardClicked(card)} image={card.url} used={card.used}>
+            <Button
+              className="bp3-minimal"
+              icon="trash"
+              intent="danger"
+              onClick={(ev) => deleteCard(ev, card)}
+            />
+          </Card>
+        ))}
+      </DeckHolder>
     </Wrapper>
   );
 };
