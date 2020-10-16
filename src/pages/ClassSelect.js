@@ -15,6 +15,7 @@ const CloseButtonWrapper = styled.div`
 `;
 const DialogText = styled.p`
   margin: 20px;
+  text-align: center;
 `;
 const CardsSelectedLabel = styled.h3`
   margin: 0;
@@ -43,10 +44,12 @@ const Card = styled.div`
   width: ${(props) => `${props.cardSize * 333}px`};
   background-color: white;
   background-image: ${(props) =>
-    `url(/images/cards/${props.selectedClass.toUpperCase()}/${props.image})`};
+    `url(${process.env.PUBLIC_URL}/images/cards/${props.selectedClass.toUpperCase()}/${
+      props.image
+    })`};
   background-repeat: no-repeat;
   background-size: contain;
-  box-shadow: ${(props) => (!props.isSelected ? `inset 0 0 0 1000px rgba(6, 0, 0, 0.4)` : "none")};
+  box-shadow: ${(props) => (!props.isSelected ? `inset 0 0 0 1000px rgba(6, 0, 0, 0.5)` : "none")};
 
   .bp3-icon {
     position: absolute;
@@ -152,7 +155,7 @@ function ClassSelect({ setChosenCards, cardSize }) {
   function renderClass(characterClass, { handleClick, modifiers }) {
     return (
       <Option onClick={() => classClicked(characterClass.id)}>
-        <img src={`/images/class-icons/${characterClass.id}.png`} />
+        <img src={`${process.env.PUBLIC_URL}/images/class-icons/${characterClass.id}.png`} />
         <p>{characterClass.label}</p>
       </Option>
     );

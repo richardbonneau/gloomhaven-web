@@ -8,10 +8,21 @@ const Wrapper = styled.div`
 `;
 const DialogText = styled.p`
   margin: 20px;
+  text-align: center;
 `;
 const ButtonsWrapper = styled.div`
   display: flex;
   justify-content: center;
+  button {
+    margin: 0 10px;
+  }
+`;
+const TopWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 25px 0;
 `;
 const DeckHolder = styled.div`
   display: flex;
@@ -28,7 +39,9 @@ const Card = styled.div`
   width: ${(props) => `${props.cardSize * 333}px`};
   background-color: white;
   background-image: ${(props) =>
-    `url(/images/cards/${props.characterClass.toUpperCase()}/${props.image})`};
+    `url(${process.env.PUBLIC_URL}/images/cards/${props.characterClass.toUpperCase()}/${
+      props.image
+    })`};
   background-repeat: no-repeat;
   background-size: contain;
   box-shadow: ${(props) =>
@@ -61,9 +74,14 @@ const Card = styled.div`
 
 function Play({ chosenCards, cardSize }) {
   const [dialogOpen, setDialogOpen] = useState(false);
-  let [deck, setDeck] = useState([]);
-  let [characterClass, setCharacterClass] = useState("");
-  let [cardToDelete, setCardToDelete] = useState("");
+  const [shortRestDialogOpen, setShortRestDialogOpen] = useState(false);
+  const [randomCardDialog, setRandomCardDialog] = useState(false);
+
+  const [deck, setDeck] = useState([]);
+  const [characterClass, setCharacterClass] = useState("");
+  const [cardToDelete, setCardToDelete] = useState("");
+
+  console.log("cardToDelete", cardToDelete);
 
   useEffect(() => {
     setCharacterClass(chosenCards.characterClass);
@@ -87,20 +105,47 @@ function Play({ chosenCards, cardSize }) {
   }
   function aboutToDeleteCard(ev, card) {
     ev.stopPropagation();
-    setCardToDelete(card);
+    setCardToDelete(card.url);
     setDialogOpen(true);
+  }
+  function aboutToShortRest() {
+    const card = deck[Math.floor(Math.random() * deck.length)];
+    setCardToDelete(card.url);
+    setShortRestDialogOpen(true);
   }
   function deleteCard() {
     setDeck(
       deck.filter((card) => {
-        return card.url !== cardToDelete.url;
+        return card.url !== cardToDelete;
       })
     );
     setCardToDelete("");
     setDialogOpen(false);
+    setShortRestDialogOpen(false);
+    setRandomCardDialog(false);
+  }
+  function parseCardName() {
+    if (cardToDelete) {
+      let cardName = cardToDelete.slice(2);
+      cardName = cardName.substring(0, cardName.length - 4);
+      let splittedCardName = cardName.split("-");
+      splittedCardName = splittedCardName.map((word) => {
+        let firstLetter = word[0].toUpperCase();
+        let restOfWord = word.slice(1);
+        return firstLetter + restOfWord;
+      });
+      cardName = splittedCardName.join(" ");
+
+      return cardName;
+    }
   }
   return (
     <Wrapper>
+      <TopWrapper>
+        <Button intent="warning" large={true} onClick={aboutToShortRest}>
+          Short Rest (Remove a card at random)
+        </Button>
+      </TopWrapper>
       <DeckHolder>
         {deck.map((card, i) => (
           <Card
@@ -134,11 +179,66 @@ function Play({ chosenCards, cardSize }) {
         </div>
 
         <ButtonsWrapper>
-          <Button large={true} intent="success" onClick={() => deleteCard()}>
+          <Button
+            large={true}
+            intent="success"
+            onClick={() => {
+              setDialogOpen(false);
+              setRandomCardDialog(true);
+            }}
+          >
             Yes
           </Button>
           <Button large={true} intent="danger" onClick={() => setDialogOpen(false)}>
             No
+          </Button>
+        </ButtonsWrapper>
+      </Dialog>
+
+      <Dialog
+        icon="error"
+        onClose={() => setShortRestDialogOpen(false)}
+        title="Short Rest"
+        isOpen={shortRestDialogOpen}
+      >
+        <div>
+          <DialogText>
+            <strong>Are you sure you want to burn a random card from your deck?</strong>
+          </DialogText>
+        </div>
+
+        <ButtonsWrapper>
+          <Button
+            large={true}
+            intent="success"
+            onClick={() => {
+              setShortRestDialogOpen(false);
+              setRandomCardDialog(true);
+            }}
+          >
+            Yes
+          </Button>
+          <Button large={true} intent="danger" onClick={() => setShortRestDialogOpen(false)}>
+            No
+          </Button>
+        </ButtonsWrapper>
+      </Dialog>
+
+      <Dialog
+        icon="error"
+        onClose={() => setRandomCardDialog(false)}
+        title="Card Burned"
+        isOpen={randomCardDialog}
+      >
+        <div>
+          <DialogText>
+            <strong>{parseCardName()} was removed from your deck</strong>
+          </DialogText>
+        </div>
+
+        <ButtonsWrapper>
+          <Button large={true} intent="danger" onClick={() => deleteCard()}>
+            Ok
           </Button>
         </ButtonsWrapper>
       </Dialog>
