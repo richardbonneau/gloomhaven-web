@@ -15,6 +15,8 @@ const DeckHolder = styled.div`
   flex-wrap: wrap;
 `;
 const Card = styled.div`
+  transition: 0.25s linear all;
+  border: ${(props) => (props.isSelected ? "solid green 5px" : "none")};
   position: relative;
   height: 500px;
   width: 333px;
@@ -27,6 +29,8 @@ const Card = styled.div`
   box-shadow: ${(props) => (props.used ? `inset 0 0 0 1000px rgba(6, 0, 0, 0.57)` : "none")};
 
   .bp3-button.bp3-minimal {
+    height: 40px;
+    width: 40px;
     position: absolute;
     color: white;
     right: 10px;
@@ -61,6 +65,22 @@ const Option = styled.div`
 function ClassSelect({ setChosenCards }) {
   const [selectedClass, setSelectedClass] = useState("");
   const [classDeck, setClassDeck] = useState([]);
+  const [selectedCards, setSelectedCards] = useState([]);
+
+  function isPartOfSelectedCards(card) {
+    return selectedCards.find((c) => card === c);
+  }
+  function addOrRemoveCardFromSelected(card) {
+    if (isPartOfSelectedCards(card)) {
+      setSelectedCards(
+        selectedCards.filter((element) => {
+          return element !== card;
+        })
+      );
+    } else {
+      setSelectedCards(selectedCards.concat(card));
+    }
+  }
 
   function query(classId) {
     switch (classId) {
@@ -103,9 +123,6 @@ function ClassSelect({ setChosenCards }) {
         return key.slice(2);
       })
     );
-
-    // let list = require.context("../../public/images/cards/TI", false, /\.(png|jpeg)$/);
-    // console.log(list);
   }
   function renderClass(characterClass, { handleClick, modifiers }) {
     return (
@@ -129,6 +146,7 @@ function ClassSelect({ setChosenCards }) {
         <DeckHolder>
           {classDeck.map((cardUrl, i) => (
             <Card
+              isSelected={isPartOfSelectedCards(cardUrl)}
               selectedClass={selectedClass}
               key={i}
               onClick={() => {
@@ -138,9 +156,9 @@ function ClassSelect({ setChosenCards }) {
             >
               <Button
                 className="bp3-minimal"
-                icon="trash"
-                intent="danger"
-                // onClick={(ev) => deleteCard(ev, card)}
+                icon={isPartOfSelectedCards(cardUrl) ? "tick" : null}
+                intent="success"
+                onClick={(ev) => addOrRemoveCardFromSelected(cardUrl)}
               />
             </Card>
           ))}
