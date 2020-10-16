@@ -82,20 +82,20 @@ const Option = styled.div`
 `;
 let characterClasses = [
   { numCardsAllowed: 12, id: "ti", label: "Tinkerer" },
-  { numCardsAllowed: 9, id: "mt", label: "Mind Thief" },
-  { numCardsAllowed: 9, id: "br", label: "Brute" },
-  { numCardsAllowed: 9, id: "sw", label: "Spellweaver" },
-  { numCardsAllowed: 9, id: "ch", label: "Cragheart" },
+  { numCardsAllowed: 10, id: "mt", label: "Mind Thief" },
+  { numCardsAllowed: 10, id: "br", label: "Brute" },
+  { numCardsAllowed: 8, id: "sw", label: "Spellweaver" },
+  { numCardsAllowed: 11, id: "ch", label: "Cragheart" },
   { numCardsAllowed: 9, id: "sc", label: "Scoundrel" },
-  { numCardsAllowed: 9, id: "be", label: "??" },
-  { numCardsAllowed: 9, id: "bt", label: "??" },
-  { numCardsAllowed: 9, id: "ds", label: "??" },
-  { numCardsAllowed: 9, id: "el", label: "??" },
+  { numCardsAllowed: 10, id: "be", label: "??" },
+  { numCardsAllowed: 10, id: "bt", label: "??" },
+  { numCardsAllowed: 12, id: "ds", label: "??" },
+  { numCardsAllowed: 10, id: "el", label: "??" },
   { numCardsAllowed: 9, id: "ns", label: "??" },
-  { numCardsAllowed: 9, id: "ph", label: "??" },
+  { numCardsAllowed: 11, id: "ph", label: "??" },
   { numCardsAllowed: 9, id: "qm", label: "??" },
-  { numCardsAllowed: 9, id: "sb", label: "??" },
-  { numCardsAllowed: 9, id: "sk", label: "??" },
+  { numCardsAllowed: 10, id: "sb", label: "??" },
+  { numCardsAllowed: 11, id: "sk", label: "??" },
   { numCardsAllowed: 9, id: "ss", label: "??" },
   { numCardsAllowed: 9, id: "su", label: "??" },
 ];
@@ -111,7 +111,42 @@ function ClassSelect({ setChosenCards, cardSize }) {
     switch (classId) {
       case "ti":
         return require.context(`../../public/images/cards/TI`, false, /.*\.png$/);
-
+      case "be":
+        return require.context(`../../public/images/cards/BE`, false, /.*\.png$/);
+      case "br":
+        return require.context(`../../public/images/cards/BR`, false, /.*\.png$/);
+      case "bs":
+        return require.context(`../../public/images/cards/BS`, false, /.*\.png$/);
+      case "bt":
+        return require.context(`../../public/images/cards/BT`, false, /.*\.png$/);
+      case "ch":
+        return require.context(`../../public/images/cards/CH`, false, /.*\.png$/);
+      case "dr":
+        return require.context(`../../public/images/cards/DR`, false, /.*\.png$/);
+      case "ds":
+        return require.context(`../../public/images/cards/DS`, false, /.*\.png$/);
+      case "el":
+        return require.context(`../../public/images/cards/EL`, false, /.*\.png$/);
+      case "mt":
+        return require.context(`../../public/images/cards/MT`, false, /.*\.png$/);
+      case "ns":
+        return require.context(`../../public/images/cards/NS`, false, /.*\.png$/);
+      case "ph":
+        return require.context(`../../public/images/cards/PH`, false, /.*\.png$/);
+      case "qm":
+        return require.context(`../../public/images/cards/QM`, false, /.*\.png$/);
+      case "sb":
+        return require.context(`../../public/images/cards/SB`, false, /.*\.png$/);
+      case "sc":
+        return require.context(`../../public/images/cards/SC`, false, /.*\.png$/);
+      case "sk":
+        return require.context(`../../public/images/cards/SK`, false, /.*\.png$/);
+      case "ss":
+        return require.context(`../../public/images/cards/SS`, false, /.*\.png$/);
+      case "su":
+        return require.context(`../../public/images/cards/SU`, false, /.*\.png$/);
+      case "sw":
+        return require.context(`../../public/images/cards/SW`, false, /.*\.png$/);
       default:
         return [];
     }
