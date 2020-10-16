@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Navbar, Button, Alignment, NavbarHeading, NavbarGroup } from "@blueprintjs/core";
 
 const Wrapper = styled.div`
-  height: 100vh;
+  min-height: 100vh;
 `;
 
 const DeckHolder = styled.div`

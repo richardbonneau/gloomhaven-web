@@ -1,11 +1,19 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { Navbar, Button, Alignment, NavbarHeading, NavbarGroup, MenuItem } from "@blueprintjs/core";
+import {
+  Navbar,
+  Button,
+  Alignment,
+  NavbarHeading,
+  NavbarGroup,
+  MenuItem,
+  Icon,
+} from "@blueprintjs/core";
 import { Select, ItemRenderer } from "@blueprintjs/select";
 
 const Wrapper = styled.div`
-  height: 100vh;
+  min-height: 100vh;
   span {
     margin: 5px;
   }
@@ -15,8 +23,10 @@ const DeckHolder = styled.div`
   flex-wrap: wrap;
 `;
 const Card = styled.div`
-  transition: 0.25s linear all;
-  border: ${(props) => (props.isSelected ? "solid green 5px" : "none")};
+  transition: 0.2s ease-in-out all;
+  border: ${(props) => (props.isSelected ? "solid green 4px" : "solid green 0px")};
+  margin: ${(props) => (props.isSelected ? "2px" : "6px")};
+  box-sizing: content-box;
   position: relative;
   height: 500px;
   width: 333px;
@@ -25,18 +35,13 @@ const Card = styled.div`
     `url(/images/cards/${props.selectedClass.toUpperCase()}/${props.image})`};
   background-repeat: no-repeat;
   background-size: contain;
-  margin: 2px;
+
   box-shadow: ${(props) => (props.used ? `inset 0 0 0 1000px rgba(6, 0, 0, 0.57)` : "none")};
 
-  .bp3-button.bp3-minimal {
-    height: 40px;
-    width: 40px;
+  .bp3-icon {
     position: absolute;
     color: white;
     right: 10px;
-    box-shadow: inset 0 0 0 1000px rgba(6, 0, 0, 0.57);
-  }
-  .bp3-button.bp3-minimal:hover {
     box-shadow: inset 0 0 0 1000px rgba(6, 0, 0, 0.57);
   }
 `;
@@ -94,35 +99,38 @@ function ClassSelect({ setChosenCards }) {
   }
 
   let characterClasses = [
-    { id: "ti", label: "Tinkerer" },
-    { id: "mt", label: "Mind Thief" },
-    { id: "br", label: "Brute" },
-    { id: "sw", label: "Spellweaver" },
-    { id: "ch", label: "Cragheart" },
-    { id: "sc", label: "Scoundrel" },
-    { id: "be", label: "??" },
-    { id: "bt", label: "??" },
-    { id: "ds", label: "??" },
-    { id: "el", label: "??" },
-    { id: "ns", label: "??" },
-    { id: "ph", label: "??" },
-    { id: "qm", label: "??" },
-    { id: "sb", label: "??" },
-    { id: "sk", label: "??" },
-    { id: "ss", label: "??" },
-    { id: "su", label: "??" },
+    { numCardsAllowed: 12, id: "ti", label: "Tinkerer" },
+    { numCardsAllowed: 9, id: "mt", label: "Mind Thief" },
+    { numCardsAllowed: 9, id: "br", label: "Brute" },
+    { numCardsAllowed: 9, id: "sw", label: "Spellweaver" },
+    { numCardsAllowed: 9, id: "ch", label: "Cragheart" },
+    { numCardsAllowed: 9, id: "sc", label: "Scoundrel" },
+    { numCardsAllowed: 9, id: "be", label: "??" },
+    { numCardsAllowed: 9, id: "bt", label: "??" },
+    { numCardsAllowed: 9, id: "ds", label: "??" },
+    { numCardsAllowed: 9, id: "el", label: "??" },
+    { numCardsAllowed: 9, id: "ns", label: "??" },
+    { numCardsAllowed: 9, id: "ph", label: "??" },
+    { numCardsAllowed: 9, id: "qm", label: "??" },
+    { numCardsAllowed: 9, id: "sb", label: "??" },
+    { numCardsAllowed: 9, id: "sk", label: "??" },
+    { numCardsAllowed: 9, id: "ss", label: "??" },
+    { numCardsAllowed: 9, id: "su", label: "??" },
   ];
 
   function classClicked(classId) {
-    console.log("howdy", classId);
-    setSelectedClass(classId);
-    console.log(query);
     var req = query(classId);
-    setClassDeck(
-      req.keys().map(function (key) {
-        return key.slice(2);
-      })
-    );
+    let classDeck = req.keys().map(function (key) {
+      return key.slice(2);
+    });
+    let numCardsAllowed = characterClasses.find((cl) => cl.id === classId).numCardsAllowed;
+    console.log("numCardsAllowed", numCardsAllowed);
+    let allLevelOneCards = classDeck.filter((card, i) => {
+      return i < numCardsAllowed;
+    });
+    setSelectedClass(classId);
+    setClassDeck(classDeck);
+    setSelectedCards(allLevelOneCards);
   }
   function renderClass(characterClass, { handleClick, modifiers }) {
     return (
@@ -149,17 +157,10 @@ function ClassSelect({ setChosenCards }) {
               isSelected={isPartOfSelectedCards(cardUrl)}
               selectedClass={selectedClass}
               key={i}
-              onClick={() => {
-                console.log("ok");
-              }}
+              onClick={(ev) => addOrRemoveCardFromSelected(cardUrl)}
               image={cardUrl}
             >
-              <Button
-                className="bp3-minimal"
-                icon={isPartOfSelectedCards(cardUrl) ? "tick" : null}
-                intent="success"
-                onClick={(ev) => addOrRemoveCardFromSelected(cardUrl)}
-              />
+              <Icon icon={isPartOfSelectedCards(cardUrl) ? "tick" : null} iconSize={25} />
             </Card>
           ))}
         </DeckHolder>
