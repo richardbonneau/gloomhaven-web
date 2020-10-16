@@ -21,8 +21,8 @@ function NavBar() {
         <NavbarGroup align={Alignment.LEFT}>
           <NavbarHeading>Gloomhaven Assistant : Ability Cards</NavbarHeading>
           <Navbar.Divider />
-          <Button className="bp3-minimal" icon="home" text="Home" />
-          <Button className="bp3-minimal" icon="document" text="Files" />
+          {/* <Button className="bp3-minimal" icon="home" text="Home" />
+          <Button className="bp3-minimal" icon="document" text="Files" /> */}
         </NavbarGroup>
       </Navbar>
     </Wrapper>
