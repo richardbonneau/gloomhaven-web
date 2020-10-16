@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Dialog, Navbar, Button, Alignment, NavbarHeading, NavbarGroup } from "@blueprintjs/core";
+import Draggable from "react-draggable";
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -9,6 +10,15 @@ const Wrapper = styled.div`
 const DialogText = styled.p`
   margin: 20px;
   text-align: center;
+`;
+const Token = styled.div`
+  position: absolute;
+  background-size: contain;
+  left: ${(props) => `${props.pos}px`};
+  background-image: ${(props) => `url(${process.env.PUBLIC_URL}/token.png)`};
+  z-index: 100;
+  height: ${(props) => `${props.cardSize * 60}px`};
+  width: ${(props) => `${props.cardSize * 60}px`};
 `;
 const ButtonsWrapper = styled.div`
   display: flex;
@@ -142,6 +152,24 @@ function Play({ chosenCards, cardSize }) {
   return (
     <Wrapper>
       <TopWrapper>
+        <Draggable>
+          <Token pos={50} cardSize={cardSize} />
+        </Draggable>
+        <Draggable>
+          <Token pos={100} cardSize={cardSize} />
+        </Draggable>
+        <Draggable>
+          <Token pos={150} cardSize={cardSize} />
+        </Draggable>
+        <Draggable>
+          <Token pos={200} cardSize={cardSize} />
+        </Draggable>
+        <Draggable>
+          <Token pos={250} cardSize={cardSize} />
+        </Draggable>
+        <Draggable>
+          <Token pos={300} cardSize={cardSize} />
+        </Draggable>
         <Button intent="warning" large={true} onClick={aboutToShortRest}>
           Short Rest (Remove a card at random)
         </Button>
