@@ -7,8 +7,8 @@ import { Button } from "@blueprintjs/core";
 import { Select } from "@blueprintjs/select";
 
 const AbilityCardsApp = ({ cardSize }) => {
-  let [chosenCards, setChosenCards] = useState([]);
-  if (chosenCards.length === 0)
+  let [chosenCards, setChosenCards] = useState({ cards: [], characterClass: "" });
+  if (chosenCards.cards.length === 0)
     return <ClassSelect cardSize={cardSize} setChosenCards={setChosenCards} />;
   else return <Play cardSize={cardSize} chosenCards={chosenCards} />;
 };

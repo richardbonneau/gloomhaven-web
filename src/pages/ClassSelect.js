@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Dialog, Button, Icon } from "@blueprintjs/core";
-import { Select, ItemRenderer } from "@blueprintjs/select";
+import { Select } from "@blueprintjs/select";
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -15,17 +14,13 @@ const CloseButtonWrapper = styled.div`
   justify-content: center;
 `;
 const DialogText = styled.p`
-  /* text-align: center; */
   margin: 20px;
 `;
 const CardsSelectedLabel = styled.h3`
-  /* text-align: center; */
-  /* font-size: 20px; */
   margin: 0;
 `;
 const CardsSelectedValues = styled.h3`
   text-align: center;
-  /* font-size: 20px; */
 `;
 const DeckHolder = styled.div`
   display: flex;
@@ -39,6 +34,7 @@ const TopWrapper = styled.div`
   margin-bottom: 25px;
 `;
 const Card = styled.div`
+  cursor: pointer;
   transition: 0.2s ease-in-out all;
   margin: 5px;
   box-sizing: content-box;
@@ -179,7 +175,15 @@ function ClassSelect({ setChosenCards, cardSize }) {
           <CardsSelectedValues>
             {selectedCards.length} / {numOfCards}
           </CardsSelectedValues>
-          <Button large={true} onClick={() => setChosenCards(selectedCards)}>
+          <Button
+            large={true}
+            onClick={() =>
+              setChosenCards({
+                cards: selectedCards,
+                characterClass: selectedClass.toUpperCase(),
+              })
+            }
+          >
             Start Playing
           </Button>
         </TopWrapper>
