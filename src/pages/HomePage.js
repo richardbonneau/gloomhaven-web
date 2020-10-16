@@ -1,7 +1,13 @@
 import React from "react";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Redirect, Link } from "react-router-dom";
 
 function HomePage() {
-  return <Redirect to="/abilities" />;
+  return (
+    <>
+      <div>Home</div>
+      <Link to="/abilities">Go to abilities</Link>
+      {/* <Redirect to="/abilities" /> */}
+    </>
+  );
 }
 export default HomePage;

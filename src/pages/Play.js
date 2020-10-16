@@ -104,7 +104,7 @@ function Play({ chosenCards, cardSize }) {
       <DeckHolder>
         {deck.map((card, i) => (
           <Card
-            key={i}
+            key={`play${i}`}
             onClick={() => cardClicked(card)}
             image={card.url}
             used={card.used}

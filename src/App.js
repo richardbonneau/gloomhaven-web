@@ -14,6 +14,7 @@ function App() {
     <div className="app">
       <BrowserRouter>
         <NavBar getCardSize={getCardSize} />
+        <AbilityCardsApp cardSize={cardSize} />
         <Switch>
           <Route exact path="/">
             <HomePage />

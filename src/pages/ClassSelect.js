@@ -108,10 +108,9 @@ function ClassSelect({ setChosenCards, cardSize }) {
     switch (classId) {
       case "ti":
         return require.context(`../../public/images/cards/TI`, false, /.*\.png$/);
-        break;
+
       default:
         return [];
-        break;
     }
   }
 
@@ -194,7 +193,7 @@ function ClassSelect({ setChosenCards, cardSize }) {
               cardSize={cardSize}
               isSelected={isPartOfSelectedCards(cardUrl)}
               selectedClass={selectedClass}
-              key={i}
+              key={`select${i}`}
               onClick={(ev) => addOrRemoveCardFromSelected(cardUrl)}
               image={cardUrl}
             >
