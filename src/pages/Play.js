@@ -12,6 +12,7 @@ const DialogText = styled.p`
   text-align: center;
 `;
 const Token = styled.div`
+  cursor: move;
   position: absolute;
   background-size: contain;
   left: ${(props) => `${props.pos}px`};
@@ -37,6 +38,7 @@ const TopWrapper = styled.div`
 const DeckHolder = styled.div`
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 `;
 
 const Card = styled.div`
@@ -47,11 +49,56 @@ const Card = styled.div`
   position: relative;
   height: ${(props) => `${props.cardSize * 500}px`};
   width: ${(props) => `${props.cardSize * 333}px`};
-  background-color: white;
+  background-color: #30404d;
   background-image: ${(props) =>
     `url(${process.env.PUBLIC_URL}/images/cards/${props.characterClass.toUpperCase()}/${
       props.image
     })`};
+  background-repeat: no-repeat;
+  background-size: contain;
+  box-shadow: ${(props) =>
+    props.used ? `inset 0 0 0 1000px rgba(5, 5, 5, 0.8)!important` : "none"};
+
+  &:hover {
+    box-shadow: inset 0 0 0 1000px rgba(30, 30, 30, 0.9);
+  }
+  &:hover > .click-to-use {
+    display: ${(props) => (props.used ? "none" : "block")};
+  }
+  &:hover > .bp3-button {
+    display: flex;
+  }
+  .click-to-use {
+    position: absolute;
+    display: none;
+    transform: translate(-50%, 50%);
+    height: 100%;
+    left: 50%;
+    font-size: 19px;
+    text-align: center;
+  }
+
+  .bp3-button {
+    display: none;
+    position: absolute;
+    color: white;
+    top: 10px;
+    right: 10px;
+    box-shadow: inset 0 0 0 1000px rgba(6, 0, 0, 0.57);
+  }
+`;
+
+const ItemCard = styled.div`
+  cursor: pointer;
+  transition: 0.2s ease-in-out all;
+  margin: 5px 20px;
+  box-sizing: content-box;
+  position: relative;
+  height: ${(props) => `${props.cardSize * 300}px`};
+  width: ${(props) => `${props.cardSize * 200}px`};
+  background-color: #30404d;
+  background-image: ${(props) =>
+    `url(${process.env.PUBLIC_URL}/images/items/${props.itemRange}/${props.image})`};
   background-repeat: no-repeat;
   background-size: contain;
   box-shadow: ${(props) =>
@@ -69,11 +116,15 @@ const Card = styled.div`
     transform: translate(-50%, 50%);
     height: 100%;
     left: 50%;
-    font-size: 19px;
+    font-size: 14px;
     text-align: center;
   }
 
+  &:hover > .bp3-button {
+    display: flex;
+  }
   .bp3-button {
+    display: none;
     position: absolute;
     color: white;
     top: 10px;
@@ -82,19 +133,30 @@ const Card = styled.div`
   }
 `;
 
-function Play({ chosenCards, cardSize }) {
+function Play({ chosenCards, cardSize, chosenItems }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [shortRestDialogOpen, setShortRestDialogOpen] = useState(false);
   const [randomCardDialog, setRandomCardDialog] = useState(false);
 
   const [deck, setDeck] = useState([]);
+  const [itemDeck, setItemDeck] = useState([]);
   const [characterClass, setCharacterClass] = useState("");
   const [cardToDelete, setCardToDelete] = useState("");
 
-  console.log("cardToDelete", cardToDelete);
-
+  console.log("itemDeckitemDeck", itemDeck);
+  console.log("chosenItems", chosenItems);
   useEffect(() => {
+    console.log("chosenItems", chosenItems);
     setCharacterClass(chosenCards.characterClass);
+    setItemDeck(
+      chosenItems.cards.map((card) => {
+        return {
+          url: card.card,
+          range: card.range,
+          used: false,
+        };
+      })
+    );
     setDeck(
       chosenCards.cards.map((card) => {
         return {
@@ -108,6 +170,14 @@ function Play({ chosenCards, cardSize }) {
   function cardClicked(clickedCard) {
     setDeck(
       deck.map((card) => {
+        if (card.url === clickedCard.url) return { ...card, used: !clickedCard.used };
+        else return card;
+      })
+    );
+  }
+  function itemCardClicked(clickedCard) {
+    setItemDeck(
+      itemDeck.map((card) => {
         if (card.url === clickedCard.url) return { ...card, used: !clickedCard.used };
         else return card;
       })
@@ -149,8 +219,24 @@ function Play({ chosenCards, cardSize }) {
       return cardName;
     }
   }
+  console.log("items", itemDeck);
   return (
     <Wrapper>
+      <DeckHolder>
+        {itemDeck.map((card, i) => (
+          <ItemCard
+            key={`play${i}`}
+            onClick={() => itemCardClicked(card)}
+            image={card.url}
+            used={card.used}
+            cardSize={cardSize}
+            itemRange={card.range}
+          >
+            <div className="click-to-use">Click to use this card</div>
+            <Button icon="trash" intent="danger" onClick={(ev) => aboutToDeleteCard(ev, card)} />
+          </ItemCard>
+        ))}
+      </DeckHolder>
       <TopWrapper>
         <Draggable>
           <Token pos={50} cardSize={cardSize} />
@@ -174,6 +260,7 @@ function Play({ chosenCards, cardSize }) {
           Short Rest (Remove a card at random)
         </Button>
       </TopWrapper>
+
       <DeckHolder>
         {deck.map((card, i) => (
           <Card

@@ -4,6 +4,8 @@ import { Dialog, Button, Icon } from "@blueprintjs/core";
 import { Select } from "@blueprintjs/select";
 
 const Wrapper = styled.div`
+  /* display: flex;
+  justify-content: center; */
   min-height: 100vh;
   span {
     margin: 5px;
@@ -42,7 +44,7 @@ const Card = styled.div`
   position: relative;
   height: ${(props) => `${props.cardSize * 500}px`};
   width: ${(props) => `${props.cardSize * 333}px`};
-  background-color: white;
+  background-color: #30404d;
   background-image: ${(props) =>
     `url(${process.env.PUBLIC_URL}/images/cards/${props.selectedClass.toUpperCase()}/${
       props.image
@@ -221,7 +223,7 @@ function ClassSelect({ setChosenCards, cardSize }) {
               })
             }
           >
-            Start Playing
+            Choose your Items
           </Button>
         </TopWrapper>
 
