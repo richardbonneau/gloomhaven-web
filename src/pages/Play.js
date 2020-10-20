@@ -173,11 +173,12 @@ function Play({ chosenCards, cardSize, chosenItems }) {
       })
     );
   }
-  function itemCardClicked(clickedCard) {
+  function itemCardClicked(clickedCard, indexOfClickedCard) {
     setItemDeck(
-      itemDeck.map((card) => {
-        if (card.url === clickedCard.url) return { ...card, used: !clickedCard.used };
-        else return card;
+      itemDeck.map((card, i) => {
+        if (i === indexOfClickedCard) {
+          return { ...card, used: !clickedCard.used };
+        } else return card;
       })
     );
   }
@@ -206,9 +207,13 @@ function Play({ chosenCards, cardSize, chosenItems }) {
   }
   function deleteCard() {
     if (cardToDeleteIsItem) {
+      let deletedOne = false;
       setItemDeck(
         itemDeck.filter((card) => {
-          return card.url !== cardToDelete;
+          if (!deletedOne && card.url === cardToDelete) {
+            deletedOne = true;
+            return false;
+          } else return true;
         })
       );
     } else {
@@ -247,7 +252,7 @@ function Play({ chosenCards, cardSize, chosenItems }) {
         {itemDeck.map((card, i) => (
           <ItemCard
             key={`play${i}`}
-            onClick={() => itemCardClicked(card)}
+            onClick={() => itemCardClicked(card, i)}
             image={card.url}
             used={card.used}
             cardSize={cardSize}
