@@ -142,11 +142,9 @@ function Play({ chosenCards, cardSize, chosenItems }) {
   const [itemDeck, setItemDeck] = useState([]);
   const [characterClass, setCharacterClass] = useState("");
   const [cardToDelete, setCardToDelete] = useState("");
+  const [cardToDeleteIsItem, setCardToDeleteIsItem] = useState(false);
 
-  console.log("itemDeckitemDeck", itemDeck);
-  console.log("chosenItems", chosenItems);
   useEffect(() => {
-    console.log("chosenItems", chosenItems);
     setCharacterClass(chosenCards.characterClass);
     setItemDeck(
       chosenItems.cards.map((card) => {
@@ -183,22 +181,44 @@ function Play({ chosenCards, cardSize, chosenItems }) {
       })
     );
   }
-  function aboutToDeleteCard(ev, card) {
+  function aboutToDeleteCard(ev, card, isItem) {
     ev.stopPropagation();
     setCardToDelete(card.url);
     setDialogOpen(true);
+    setCardToDeleteIsItem(isItem);
   }
+
   function aboutToShortRest() {
     const card = deck[Math.floor(Math.random() * deck.length)];
     setCardToDelete(card.url);
     setShortRestDialogOpen(true);
-  }
-  function deleteCard() {
+
     setDeck(
-      deck.filter((card) => {
-        return card.url !== cardToDelete;
+      deck.map((card) => {
+        return { ...card, used: false };
       })
     );
+    setItemDeck(
+      itemDeck.map((card) => {
+        return { ...card, used: false };
+      })
+    );
+  }
+  function deleteCard() {
+    if (cardToDeleteIsItem) {
+      setItemDeck(
+        itemDeck.filter((card) => {
+          return card.url !== cardToDelete;
+        })
+      );
+    } else {
+      setDeck(
+        deck.filter((card) => {
+          return card.url !== cardToDelete;
+        })
+      );
+    }
+
     setCardToDelete("");
     setDialogOpen(false);
     setShortRestDialogOpen(false);
@@ -206,7 +226,8 @@ function Play({ chosenCards, cardSize, chosenItems }) {
   }
   function parseCardName() {
     if (cardToDelete) {
-      let cardName = cardToDelete.slice(2);
+      let cardName = cardToDelete;
+      if (!cardToDeleteIsItem) cardName = cardToDelete.slice(2);
       cardName = cardName.substring(0, cardName.length - 4);
       let splittedCardName = cardName.split("-");
       splittedCardName = splittedCardName.map((word) => {
@@ -219,7 +240,7 @@ function Play({ chosenCards, cardSize, chosenItems }) {
       return cardName;
     }
   }
-  console.log("items", itemDeck);
+
   return (
     <Wrapper>
       <DeckHolder>
@@ -233,7 +254,11 @@ function Play({ chosenCards, cardSize, chosenItems }) {
             itemRange={card.range}
           >
             <div className="click-to-use">Click to use this card</div>
-            <Button icon="trash" intent="danger" onClick={(ev) => aboutToDeleteCard(ev, card)} />
+            <Button
+              icon="trash"
+              intent="danger"
+              onClick={(ev) => aboutToDeleteCard(ev, card, true)}
+            />
           </ItemCard>
         ))}
       </DeckHolder>
@@ -276,7 +301,7 @@ function Play({ chosenCards, cardSize, chosenItems }) {
               // className="bp3-minimal"
               icon="trash"
               intent="danger"
-              onClick={(ev) => aboutToDeleteCard(ev, card)}
+              onClick={(ev) => aboutToDeleteCard(ev, card, false)}
             />
           </Card>
         ))}
@@ -318,7 +343,11 @@ function Play({ chosenCards, cardSize, chosenItems }) {
       >
         <div>
           <DialogText>
-            <strong>Are you sure you want to burn a random card from your deck?</strong>
+            <strong>
+              {cardToDeleteIsItem
+                ? "Are you sure you want to remove this item from your deck?"
+                : "Are you sure you want to burn a random card from your deck?"}
+            </strong>
           </DialogText>
         </div>
 

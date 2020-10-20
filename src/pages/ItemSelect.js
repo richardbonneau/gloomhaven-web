@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Dialog, Button, Icon } from "@blueprintjs/core";
 import { Select } from "@blueprintjs/select";
@@ -96,10 +96,14 @@ let itemRanges = [
 ];
 
 function ItemSelect({ setChosenItems, cardSize }) {
-  const [selectedItemRange, setSelectedItemRange] = useState("");
+  const [selectedItemRange, setSelectedItemRange] = useState("1-14");
   const [itemsFromRange, setItemsFromRange] = useState([]);
   const [selectedCards, setSelectedCards] = useState([]);
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  useEffect(() => {
+    itemRangeClicked(selectedItemRange);
+  }, []);
 
   function query(classId) {
     switch (classId) {
@@ -123,14 +127,12 @@ function ItemSelect({ setChosenItems, cardSize }) {
         return require.context(`../../public/images/items/64-151`, false, /.*\.png$/);
       case "152-165":
         return require.context(`../../public/images/items/152-165`, false, /.*\.png$/);
-
       default:
         return [];
     }
   }
 
   function howManyOfThisCard(card) {
-    console.log("howManyOfThisCard", card, "selectedCards", selectedCards);
     let count = 0;
     selectedCards.forEach((c) => {
       if (card === c.card) count++;
@@ -145,7 +147,6 @@ function ItemSelect({ setChosenItems, cardSize }) {
     let removeExt = card.split(".");
     let split = removeExt[0].split("-");
     let ret = split.some((word) => {
-      console.log("word", word);
       if (
         word === "potion" ||
         word === "powder" ||
@@ -173,7 +174,6 @@ function ItemSelect({ setChosenItems, cardSize }) {
     else return ret;
   }
   function addOrRemoveCardFromSelected(card) {
-    console.log("addOrRemoveCardFromSelected card", card);
     if (!isItem(card) && isPartOfSelectedCards(card)) {
       setSelectedCards(
         selectedCards.filter((element) => {
@@ -206,7 +206,7 @@ function ItemSelect({ setChosenItems, cardSize }) {
   return (
     <Wrapper>
       <Select filterable={false} items={itemRanges} itemRenderer={renderItemRange}>
-        <Button intent="success" text={"Now choose your items"} />
+        <Button intent="success" text={`Items # ${selectedItemRange}`} />
       </Select>
 
       <TopWrapper>
