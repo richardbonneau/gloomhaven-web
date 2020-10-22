@@ -47,6 +47,8 @@ const Card = styled.div`
   margin: 5px;
   box-sizing: content-box;
   position: relative;
+  border: ${(props) =>
+    props.selected && !props.used ? "3px solid #f7ff00" : "3px solid transparent"};
   height: ${(props) => `${props.cardSize * 500}px`};
   width: ${(props) => `${props.cardSize * 333}px`};
   background-color: #30404d;
@@ -151,6 +153,7 @@ function Play({ chosenCards, cardSize, chosenItems }) {
         return {
           url: card.card,
           range: card.range,
+
           used: false,
         };
       })
@@ -160,6 +163,7 @@ function Play({ chosenCards, cardSize, chosenItems }) {
         return {
           url: card,
           used: false,
+          selected: false,
         };
       })
     );
@@ -168,8 +172,11 @@ function Play({ chosenCards, cardSize, chosenItems }) {
   function cardClicked(clickedCard) {
     setDeck(
       deck.map((card) => {
-        if (card.url === clickedCard.url) return { ...card, used: !clickedCard.used };
-        else return card;
+        if (card.url === clickedCard.url) {
+          if (!card.selected && !card.used) return { ...card, used: false, selected: true };
+          else if (card.selected && !card.used) return { ...card, used: true, selected: true };
+          else return { ...card, used: false, selected: false };
+        } else return card;
       })
     );
   }
@@ -196,7 +203,7 @@ function Play({ chosenCards, cardSize, chosenItems }) {
 
     setDeck(
       deck.map((card) => {
-        return { ...card, used: false };
+        return { ...card, used: false, selected: false };
       })
     );
     setItemDeck(
@@ -245,7 +252,7 @@ function Play({ chosenCards, cardSize, chosenItems }) {
       return cardName;
     }
   }
-
+  console.log("deck", deck);
   return (
     <Wrapper>
       <DeckHolder>
@@ -257,6 +264,7 @@ function Play({ chosenCards, cardSize, chosenItems }) {
             used={card.used}
             cardSize={cardSize}
             itemRange={card.range}
+            selected={card.selected}
           >
             <div className="click-to-use">Click to use this card</div>
             <Button
@@ -300,8 +308,9 @@ function Play({ chosenCards, cardSize, chosenItems }) {
             used={card.used}
             characterClass={characterClass}
             cardSize={cardSize}
+            selected={card.selected}
           >
-            <div className="click-to-use">Click to use this card</div>
+            <div className="click-to-use">Click to {card.selected ? "use" : "play"} this card</div>
             <Button
               // className="bp3-minimal"
               icon="trash"
