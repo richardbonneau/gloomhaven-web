@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch, HashRouter } from "react-router-dom";
 import AbilityCardsApp from "./pages/AbilityCardsApp";
 import HomePage from "./pages/HomePage";
 import NavBar from "./components/NavBar";
@@ -12,7 +12,7 @@ function App() {
   }
   return (
     <div className="app">
-      <BrowserRouter>
+      <HashRouter>
         <Switch>
           <Route exact path="/">
             <HomePage />
@@ -23,7 +23,7 @@ function App() {
             <AbilityCardsApp cardSize={cardSize} />
           </Route>
         </Switch>
-      </BrowserRouter>
+      </HashRouter>
     </div>
   );
 }
