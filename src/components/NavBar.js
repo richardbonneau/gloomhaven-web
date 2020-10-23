@@ -14,7 +14,10 @@ const Wrapper = styled.div`
   }
 `;
 const ButtonsWrapper = styled.div`
-  display: flex;
+  display: ${(props) => `${props.mobile ? "flex" : "none"}`};
+  @media (min-width: 768px) {
+    display: ${(props) => `${props.mobile ? "none" : "flex"}`};
+  }
   button {
     margin: 0 2px;
   }
@@ -44,11 +47,18 @@ function NavBar({ getCardSize }) {
           </NavHeading>
           <Navbar.Divider />
           <Label>Cards Size</Label>
-          <ButtonsWrapper>
+          <ButtonsWrapper mobile={false}>
             <Button text={"Small"} onClick={() => setCardSize(0.4)} />
             <Button text={"Medium"} onClick={() => setCardSize(0.6)} />
             <Button text={"Large"} onClick={() => setCardSize(0.8)} />
             <Button text={"X-Large"} onClick={() => setCardSize(1)} />
+          </ButtonsWrapper>
+
+          <ButtonsWrapper mobile={true}>
+            <Button text={"S"} onClick={() => setCardSize(0.4)} />
+            <Button text={"M"} onClick={() => setCardSize(0.6)} />
+            <Button text={"L"} onClick={() => setCardSize(0.8)} />
+            <Button text={"XL"} onClick={() => setCardSize(1)} />
           </ButtonsWrapper>
         </NavbarGroup>
       </Navbar>

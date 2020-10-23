@@ -47,12 +47,11 @@ const Title = styled.h1`
   }
 `;
 
-const SubTitle = styled.h3``;
 const TutorialButton = styled.a`
   background: black;
   display: flex;
   align-items: center;
-  color: #e9e9e9;
+  color: #f0f0f0;
   padding: 0.5em;
   font-size: 1.5em;
   text-align: center;
