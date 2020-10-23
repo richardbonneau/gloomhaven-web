@@ -13,17 +13,16 @@ function App() {
   return (
     <div className="app">
       <BrowserRouter>
-        <NavBar getCardSize={getCardSize} />
-        <AbilityCardsApp cardSize={cardSize} />
-        {/* <Switch>
+        <Switch>
           <Route exact path="/">
             <HomePage />
           </Route>
 
           <Route exact path="/abilities">
+            <NavBar getCardSize={getCardSize} />
             <AbilityCardsApp cardSize={cardSize} />
           </Route>
-        </Switch> */}
+        </Switch>
       </BrowserRouter>
     </div>
   );
