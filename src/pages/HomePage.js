@@ -7,7 +7,7 @@ const Hero = styled.section`
   background-size: cover;
   background-position: center;
   position: relative;
-  box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.74);
+  box-shadow: rgb(19 19 19 / 90%) 0px 0px 0px 1000px inset;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -84,7 +84,7 @@ const Phones = styled.img`
   bottom: 10px;
   width: 100%;
   @media (min-width: 768px) {
-    width: 30em;
+    width: 40em;
   }
 `;
 function HomePage() {
