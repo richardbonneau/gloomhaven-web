@@ -12,7 +12,7 @@ function App() {
   }
   return (
     <div className="app">
-      <HashRouter>
+      <BrowserRouter>
         <Switch>
           <Route exact path="/">
             <HomePage />
@@ -23,7 +23,7 @@ function App() {
             <AbilityCardsApp cardSize={cardSize} />
           </Route>
         </Switch>
-      </HashRouter>
+      </BrowserRouter>
     </div>
   );
 }
