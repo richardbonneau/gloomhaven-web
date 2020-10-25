@@ -24,9 +24,9 @@ const getClientEnvironment = require("./env");
 const ModuleNotFoundPlugin = require("react-dev-utils/ModuleNotFoundPlugin");
 const ForkTsCheckerWebpackPlugin = require("react-dev-utils/ForkTsCheckerWebpackPlugin");
 const typescriptFormatter = require("react-dev-utils/typescriptFormatter");
-
+const HtmlWebPackPlugin = require("html-webpack-plugin");
 const postcssNormalize = require("postcss-normalize");
-
+const nodeExternals = require("webpack-node-externals");
 const appPackageJson = require(paths.appPackageJson);
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
@@ -63,6 +63,67 @@ module.exports = function (webpackEnv) {
   // Omit trailing slash as %PUBLIC_URL%/xyz looks better than %PUBLIC_URL%xyz.
   // Get environment variables to inject into our app.
   const env = getClientEnvironment(paths.publicUrlOrPath.slice(0, -1));
+
+  var browserConfig = {
+    devServer: {
+      historyApiFallback: true,
+      proxy: {
+        "/api": "http://localhost:3012",
+      },
+    },
+    entry: ["babel-polyfill", __dirname + "/src/index.js"],
+    output: {
+      path: path.resolve(__dirname + "/public"),
+      filename: "bundle.js",
+      publicPath: "/",
+    },
+    module: {
+      rules: [
+        {
+          test: /\.jsx?$/,
+          exclude: /node_modules/,
+          use: {
+            loader: "babel-loader",
+            query: {
+              presets: ["react", "env", "stage-0"],
+            },
+          },
+        },
+      ],
+    },
+    plugins: [
+      new HtmlWebPackPlugin({
+        template: "./public/index.html",
+      }),
+    ],
+  };
+
+  var serverConfig = {
+    target: "node",
+    externals: [nodeExternals()],
+    entry: __dirname + "/server/main.js",
+    output: {
+      path: path.resolve(__dirname + "/public"),
+      filename: "server.js",
+      publicPath: "/",
+    },
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          use: {
+            loader: "babel-loader",
+            query: {
+              presets: ["react", "env", "stage-0"],
+            },
+          },
+        },
+      ],
+    },
+  };
+
+  module.exports = [browserConfig, serverConfig];
 
   // common function to get style loaders
   const getStyleLoaders = (cssOptions, preProcessor) => {

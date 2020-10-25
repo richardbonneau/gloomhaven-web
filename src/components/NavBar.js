@@ -42,7 +42,7 @@ function NavBar({ getCardSize }) {
     <Wrapper>
       <Navbar>
         <NavbarGroup align={Alignment.LEFT}>
-          <NavHeading href="/">
+          <NavHeading href="/abilities">
             <NavbarHeading>Gloomhaven Assistant : Ability Cards</NavbarHeading>
           </NavHeading>
           <Navbar.Divider />
