@@ -99,15 +99,6 @@ function HomePage() {
             health, statuses and abilities.
           </span>
         </Title>
-        <TutorialButton onClick={() => history.push("/abilities")}>
-          <ButtonIcon src="/images/ability.png" />
-          Launch the Ability Cards Tool
-        </TutorialButton>
-        <TutorialButton target="_blank" href="https://www.youtube.com/watch?v=3lkyRDdiBro">
-          <ButtonIcon src="/images/youtube.png" />
-          Watch the Tutorial on YouTube
-        </TutorialButton>
-
         <a
           target="_blank"
           href="https://play.google.com/store/apps/details?id=com.richard.gloomhaven_assistant&hl=en_CA&gl=US"
@@ -117,6 +108,14 @@ function HomePage() {
         <a target="_blank" href="https://apps.apple.com/ca/app/gloomhaven-assistant/id1532278677">
           <StoreImg target="_blank" href="/" src="/images/istore.png" />
         </a>
+        <TutorialButton onClick={() => history.push("/abilities")}>
+          <ButtonIcon src="/images/ability.png" />
+          Launch the Ability Cards Tool
+        </TutorialButton>
+        <TutorialButton target="_blank" href="https://www.youtube.com/watch?v=3lkyRDdiBro">
+          <ButtonIcon src="/images/youtube.png" />
+          Watch the Tutorial on YouTube
+        </TutorialButton>
       </FirstSection>
       <Phones src="/images/phones.png" />
     </Hero>
