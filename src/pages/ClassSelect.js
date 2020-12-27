@@ -100,6 +100,10 @@ let characterClasses = [
   { numCardsAllowed: 11, id: "sk", label: "??" },
   { numCardsAllowed: 9, id: "ss", label: "??" },
   { numCardsAllowed: 9, id: "su", label: "??" },
+  { numCardsAllowed: 10, id: "ih", label: "??" },
+  { numCardsAllowed: 9, id: "qd", label: "??" },
+  { numCardsAllowed: 11, id: "hv", label: "??" },
+  { numCardsAllowed: 10, id: "vr", label: "??" },
 ];
 
 function ClassSelect({ setChosenCards, cardSize }) {
@@ -149,6 +153,14 @@ function ClassSelect({ setChosenCards, cardSize }) {
         return require.context(`../../public/images/cards/SU`, false, /.*\.png$/);
       case "sw":
         return require.context(`../../public/images/cards/SW`, false, /.*\.png$/);
+      case "ih":
+        return require.context(`../../public/images/cards/IH`, false, /.*\.png$/);
+      case "qd":
+        return require.context(`../../public/images/cards/QD`, false, /.*\.png$/);
+        case "hv":
+          return require.context(`../../public/images/cards/HV`, false, /.*\.png$/);
+          case "vr":
+            return require.context(`../../public/images/cards/VR`, false, /.*\.png$/);
       default:
         return [];
     }
