@@ -112,10 +112,10 @@ function HomePage() {
           <ButtonIcon src="/images/ability.png" />
           Launch the Ability Cards Tool
         </TutorialButton>
-        <TutorialButton target="_blank" href="https://www.youtube.com/watch?v=3lkyRDdiBro">
+        {/* <TutorialButton target="_blank" href="https://www.youtube.com/watch?v=3lkyRDdiBro">
           <ButtonIcon src="/images/youtube.png" />
           Watch the Tutorial on YouTube
-        </TutorialButton>
+        </TutorialButton> */}
       </FirstSection>
       <Phones src="/images/phones.png" />
     </Hero>
